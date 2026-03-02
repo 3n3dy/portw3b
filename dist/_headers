@@ -1,0 +1,7 @@
+/*
+  # SPA fallback
+  Try .html first, then fallback to index.html
+  https://developers.cloudflare.com/pages/configuration/headers/#single-page-application-spa
+  Single-Page App catch-all
+  Forward all unmatched requests to index.html
+  index.html 200
