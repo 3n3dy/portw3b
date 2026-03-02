@@ -81,7 +81,6 @@ export function useCustomCursor() {
       dot.remove();
       ring.remove();
       document.body.style.cursor = "";
-      
     };
   }, []);
 }
