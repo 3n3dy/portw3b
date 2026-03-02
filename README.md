@@ -1,2 +1,7 @@
-# portfolio
-w3bedy portfolio
+# Portfolio
+
+## Deploy
+```bash
+npm run build
+dist/ → Cloudflare Pages
+```
