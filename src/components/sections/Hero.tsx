@@ -35,7 +35,7 @@ const HeroSection = memo(() => {
       <div className="flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full px-6 pt-24 pb-16">
         {/* Eyebrow */}
         <div className="section-label mb-10 hero-fade hero-fade-1 opacity-0">
-          Веб-розробник · І багато інших професій
+          Веб-розробник · Інженер · Medical Staff
         </div>
 
         {/* Headline */}
