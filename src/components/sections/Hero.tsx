@@ -112,7 +112,7 @@ const HeroSection = memo(() => {
       {/* Marquee */}
       <div className="border-t border-border py-4 overflow-hidden">
         <div className="marquee-track">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+          {Array(4).fill(0).flatMap(() => MARQUEE_ITEMS).map((item, i) => (
             <span
               key={i}
               className={`font-mono text-xs tracking-widest uppercase px-4 whitespace-nowrap ${item === "·" ? "text-lime" : "text-muted"
