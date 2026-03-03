@@ -1,7 +1,6 @@
-/*
-  # SPA fallback
-  Try .html first, then fallback to index.html
-  https://developers.cloudflare.com/pages/configuration/headers/#single-page-application-spa
-  Single-Page App catch-all
-  Forward all unmatched requests to index.html
+/favicon* 
+  Cache-Control: public, max-age=31536000, immutable
+/apple-touch-icon*
+  Cache-Control: public, max-age=31536000, immutable
+/* 
   index.html 200
