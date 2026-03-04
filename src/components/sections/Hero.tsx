@@ -89,13 +89,15 @@ const HeroSection = memo(() => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3, duration: 0.6 }}
-          className="mt-16 pt-8 border-t border-border grid grid-cols-3 md:grid-cols-4 gap-6 max-w-2xl"
+          className="mt-16 pt-8 border-t border-border grid grid-cols-3 md:grid-cols-3 gap-6 max-w-2xl"
         >
           {[
             { n: "10%", label: "Luck" },
             { n: "20%", label: "Skill" },
             { n: "15%", label: "Power of will" },
-            { n: "100%", label: "TypeScript" },
+            { n: "5%", label: "Pleasure" },
+            { n: "50%", label: "Pain" },
+            { n: "100%", label: "TypeScript for everyday" },
           ].map(({ n, label }) => (
             <div key={label}>
               <div className="font-display font-black text-lime text-3xl md:text-4xl leading-none mb-1">

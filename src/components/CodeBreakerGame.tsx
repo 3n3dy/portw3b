@@ -255,13 +255,18 @@ export const CodeBreakerGame = memo(({ show, onClose }: CodeBreakerProps) => {
                     </form>
 
                     {/* Alternative: Click to crack */}
-                    <button
-                      onClick={() => setStage("cracking")}
-                      className="mt-8 btn-outline w-full justify-center"
-                      style={{ cursor: "none" }}
-                    >
-                      🔓 Зламати систему (клік)
-                    </button>
+                   <button
+  onClick={handleCommand}
+  disabled={!command.trim()}
+  className="mt-8 btn-outline w-full justify-center disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none hover:scale-[1.02] transition-all"
+  style={{ cursor: command.trim() ? "pointer" : "not-allowed" }}
+>
+  {command.trim() ? (
+    <span className="text-lime-400 font-mono tracking-wider">🔓 Зламати систему (КЛІК)</span>
+  ) : (
+    <span className="text-white-500 font-mono tracking-wider">🔒 Введи пароль спочатку</span>
+  )}
+</button>
                   </div>
                 )}
 
@@ -379,8 +384,8 @@ export const CodeBreakerGame = memo(({ show, onClose }: CodeBreakerProps) => {
                         🎮 Achievement Unlocked
                       </div>
                       <div className="text-sm text-parchment-dim">
-                        <em>"Code Breaker"</em> — Ти успішно зламав систему і дістав
-                        секретну інфу. Respect за цікавість! 🔥
+                        <em>"Code Breaker"</em> — Ти успішно зламав систему і здобув
+                        секретну інфу. 🔥
                       </div>
                     </motion.div>
                   </div>

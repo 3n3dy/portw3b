@@ -11,7 +11,7 @@ export const projects: Project[] = [
     tech: ["React", "TypeScript", "Vite", "Tailwind", "Framer Motion"],
     url: "https://zvychaika.com",
     year: "2026",
-    screenshot: "/screenshoots/zvychaika.jpg",
+    screenshot: "/screenshoots/zvych.webp",
     featured: true,
   },
   {
@@ -30,15 +30,14 @@ export const projects: Project[] = [
   {
     id: 3,
     slug: "Ще деякі",
-    title: "Назва Проєкту 3",
+    title: "Side websites",
     category: "Landing Page",
     description:
       "Короткий опис проєкту. Що це, для кого, які задачі вирішує.",
     tech: ["React", "TypeScript", "Vite"],
     url: "https://projectssample.all.com",
     year: "2025",
-    screenshot: "/screenshoots/websites.webp",
-    previewGif: "/screenshoots/websites.gif",
+    screenshot: "/screenshoots/proj3.webp",
     featured: true,
   },
 ];
