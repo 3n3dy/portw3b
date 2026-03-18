@@ -29,11 +29,24 @@ export const projects: Project[] = [
   },
   {
     id: 3,
+    slug: "BonnieBeadShop",
+    title: "Seller Shop",
+    category: "Seller website",
+    description:
+      "Хендмейд магазин з каталогами, адмінкою та локальною реєстрацією юзера",
+    tech: ["React", "TypeScript", "Vite"],
+    url: "https://bonniebead.pages.dev",
+    year: "2026",
+    screenshot: "/screenshoots/proj3.webp",
+    featured: true,
+  },
+    {
+    id: 4,
     slug: "Ще деякі",
     title: "Side websites",
     category: "Landing Page",
     description:
-      "Короткий опис проєкту. Що це, для кого, які задачі вирішує.",
+      "Різні сайти, різні задачі",
     tech: ["React", "TypeScript", "Vite"],
     url: "https://projectssample.all.com",
     year: "2025",
