@@ -1,18 +1,21 @@
 import { memo, useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navItems = [
-  { label: "Проєкти", href: "#projects" },
-  { label: "Про мене", href: "#about" },
-  { label: "Контакт", href: "#contact" },
-];
+import LangSwitcher from "@/components/LangSwitcher";
+import { useLang } from "@/context/LangContext";
 
 const Header = memo(() => {
+  const { t } = useLang();
   const [visible, setVisible] = useState(true);
   const [atTop, setAtTop] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastY = useRef(0);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const navItems = [
+    { label: t.nav.projects, href: "#projects" },
+    { label: t.nav.about,    href: "#about"    },
+    { label: t.nav.contact,  href: "#contact"  },
+  ];
 
   useEffect(() => {
     const handler = () => {
@@ -27,43 +30,22 @@ const Header = memo(() => {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  // Закриття меню при кліку поза ним
   useEffect(() => {
     if (!menuOpen) return;
-
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      
-      // Перевірка, чи клік поза меню
       if (menuRef.current && !menuRef.current.contains(target)) {
-        // Також перевірка, чи це не кнопка бургера
-        if (!target.closest('[aria-label="Меню"]')) {
-          setMenuOpen(false);
-        }
+        if (!target.closest('[aria-label="Menu"]')) setMenuOpen(false);
       }
     };
-
-    // Невелика затримка, щоб не спрацювало одразу після відкриття
-    const timer = setTimeout(() => {
-      document.addEventListener("click", handleClickOutside);
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener("click", handleClickOutside);
-    };
+    const timer = setTimeout(() => document.addEventListener("click", handleClickOutside), 100);
+    return () => { clearTimeout(timer); document.removeEventListener("click", handleClickOutside); };
   }, [menuOpen]);
 
   const scrollTo = (href: string) => {
     setMenuOpen(false);
     setTimeout(() => {
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ 
-          behavior: "smooth", 
-          block: "start" 
-        });
-      }
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 350);
   };
 
@@ -107,20 +89,19 @@ const Header = memo(() => {
                   className="btn-lime text-xs"
                   style={{ cursor: "pointer" }}
                 >
-                  Зв'язатись →
+                  {t.nav.cta}
                 </button>
+
+                {/* ← МОВНИЙ СВІТЧЕР (десктоп) */}
+                <LangSwitcher variant="header" />
               </nav>
 
-              {/* Mobile burger - КОМПАКТНИЙ */}
+              {/* Mobile burger */}
               <button
                 className="md:hidden w-6 h-6 flex flex-col justify-center gap-1 p-1 relative z-[60]"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setMenuOpen(prev => !prev);
-                }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMenuOpen(prev => !prev); }}
                 style={{ WebkitTapHighlightColor: "transparent", cursor: "pointer" }}
-                aria-label="Меню"
+                aria-label="Menu"
               >
                 <span className={`block h-px w-4 bg-parchment transition-all duration-300 origin-center ${menuOpen ? "rotate-45 translate-y-0.5" : ""}`} />
                 <span className={`block h-px w-4 bg-parchment transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
@@ -131,11 +112,10 @@ const Header = memo(() => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Menu - ПОЛОВИНА ШИРИНИ + BACKDROP */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop - затемнений фон */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -144,8 +124,6 @@ const Header = memo(() => {
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
               onClick={() => setMenuOpen(false)}
             />
-
-            {/* Меню справа - 50% ширини */}
             <motion.div
               ref={menuRef}
               initial={{ x: "100%" }}
@@ -168,11 +146,21 @@ const Header = memo(() => {
                 ))}
                 <button
                   onClick={() => scrollTo("#contact")}
-                  className="btn-lime w-full justify-center mt-4"
+                  className="btn-lime w-full justify-center mt-2"
                   style={{ cursor: "pointer" }}
                 >
-                  Зв'язатись →
+                  {t.nav.cta}
                 </button>
+
+                {/* ← МОВНИЙ СВІТЧЕР (мобайл) */}
+                <div className="border-t border-border pt-4">
+                  <p className="font-mono text-xs text-muted tracking-widest uppercase mb-3 text-right">
+                    Language
+                  </p>
+                  <div className="flex justify-end">
+                    <LangSwitcher variant="mobile" />
+                  </div>
+                </div>
               </div>
             </motion.div>
           </>

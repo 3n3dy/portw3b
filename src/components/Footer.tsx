@@ -1,6 +1,8 @@
 import { memo } from "react";
+import { useLang } from "@/context/LangContext";
 
 const Footer = memo(() => {
+  const { t } = useLang();
   const year = new Date().getFullYear();
 
   return (
@@ -9,20 +11,9 @@ const Footer = memo(() => {
         <div className="font-display font-black text-xl tracking-widest">
           w3bedy<span className="text-lime">.</span>
         </div>
-
         <div className="font-mono text-xs text-muted tracking-wider text-center">
-          © {year} · Всі права захищені · Зроблено мною для вас
+          © {year} · {t.footer.copy}
         </div>
-
-        {/* <a
-          href="https://github.com/3n3dy"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-xs text-muted hover:text-lime transition-colors tracking-wider"
-          style={{ cursor: "none" 
-        > 
-          GitHub →
-        </a>*/}
       </div>
     </footer>
   );

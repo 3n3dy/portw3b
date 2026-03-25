@@ -1,8 +1,28 @@
 import { memo, useState, useEffect } from "react";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 import { Mail, MessageCircle, Send, Check, PhoneCallIcon } from "lucide-react";
+
+// Стиль для contact card — CSS transform замість Framer Motion whileHover
+// щоб уникнути артефакту перемальовки браузера
+const cardStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 16,
+  padding: 20,
+  border: "1px solid rgba(238,232,220,0.08)",
+  textDecoration: "none",
+  transition: "border-color 0.3s ease, transform 0.25s ease",
+  willChange: "transform",
+  cursor: "none",
+};
+const cardHoverStyle: React.CSSProperties = {
+  ...cardStyle,
+  transform: "translateX(6px)",
+  borderColor: "rgba(200,241,53,0.3)",
+};
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useLang } from "@/context/LangContext";
 
 const CONTACTS = [
   {
@@ -22,23 +42,83 @@ const CONTACTS = [
     label: "Phone",
     value: "+38097094209",
     href: "tel:+38097094209",
-  }
+  },
 ];
 
+// Окремий компонент з useState для hover — уникаємо артефакту Framer Motion whileHover
+const ContactCard = memo(({
+  icon: Icon,
+  label,
+  value,
+  href,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  href: string;
+}) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={hovered ? cardHoverStyle : cardStyle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div
+        className="flex items-center justify-center flex-shrink-0 transition-colors duration-300"
+        style={{
+          width: 40, height: 40,
+          border: `1px solid ${hovered ? "rgba(200,241,53,0.5)" : "rgba(238,232,220,0.08)"}`,
+          color: hovered ? "#C8F135" : "#4A5568",
+          transition: "border-color 0.3s, color 0.3s",
+        }}
+      >
+        <Icon size={18} />
+      </div>
+      <div>
+        <div className="font-mono text-xs text-muted tracking-wider uppercase mb-0.5">
+          {label}
+        </div>
+        <div
+          className="font-medium transition-colors duration-300"
+          style={{ color: hovered ? "#C8F135" : "#EEE8DC" }}
+        >
+          {value}
+        </div>
+      </div>
+      <div
+        className="ml-auto transition-colors duration-300"
+        style={{ color: hovered ? "#C8F135" : "#4A5568" }}
+      >
+        →
+      </div>
+    </a>
+  );
+});
+ContactCard.displayName = "ContactCard";
+
 const ContactSection = memo(() => {
+  const { t } = useLang();
+  const { contact } = t;
+
   const headRef = useScrollReveal<HTMLDivElement>();
   const formRef = useScrollReveal<HTMLDivElement>();
 
   const [formData, setFormData] = useState({ name: "", contact: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
   useEffect(() => {
-    emailjs.init("UaH2NxSvmgacE20AS");  // ТВІЙ Public Key
+    emailjs.init("UaH2NxSvmgacE20AS");
   }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (status === "sending") return;
     setStatus("sending");
-
     try {
       await emailjs.send(
         "service_n4ne0up",
@@ -47,9 +127,9 @@ const ContactSection = memo(() => {
           from_name: formData.name,
           from_email: formData.contact,
           message: formData.message,
-          to_email: "w3bedy@proton.me"
+          to_email: "w3bedy@proton.me",
         },
-        "gWsWJHXt6sboKCdZ5"        // ← ЗАМІНИ
+        "gWsWJHXt6sboKCdZ5"
       );
       setStatus("success");
       setFormData({ name: "", contact: "", message: "" });
@@ -60,87 +140,66 @@ const ContactSection = memo(() => {
     }
   };
 
+  const { form } = contact;
 
   return (
     <section id="contact" className="py-28 relative overflow-hidden">
       <div className="grid-line-v" style={{ left: "50%" }} />
-
-      {/* BG number */}
-       <div
+      <div
         className="absolute right-16 top-0 font-display font-black text-parchment select-none pointer-events-none"
-        style={{ fontSize: "30vw", opacity: 0.015, lineHeight: 1, transform: "translateX(20%), " }}
+        style={{ fontSize: "30vw", opacity: 0.015, lineHeight: 1 }}
       >
         📩
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div ref={headRef} className="reveal mb-16">
-          <div className="section-label mb-4">Контакт</div>
-          <h2 className="font-display font-black leading-none"
-            style={{ fontSize: "clamp(2.5rem, 7vw, 6rem)" }}>
-            Маєш<br />
-            <span className="italic text-parchment-dim">проЄкт?</span>
+          <div className="section-label mb-4">{contact.label}</div>
+          <h2
+            className="font-display font-black leading-none"
+            style={{ fontSize: "clamp(2.5rem, 7vw, 6rem)" }}
+          >
+            {contact.title1}<br />
+            <span className="italic text-parchment-dim">{contact.title2}</span>
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left — links + text */}
+          {/* Left */}
           <div>
             <span className="text-parchment-dim text-lg leading-relaxed mb-12 font-light">
-              Напиши мені — обговоримо задачу, терміни і бюджет.
-              Відповідаю швидко (протягом доби).
+              {contact.sub}
             </span>
 
-            <div className="space-y-4">
+            <div className="space-y-4 mt-8">
               {CONTACTS.map(({ icon: Icon, label, value, href }) => (
-                <motion.a
+                <ContactCard
                   key={label}
+                  icon={Icon}
+                  label={label}
+                  value={value}
                   href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ x: 6 }}
-                  className="flex items-center gap-4 p-5 border border-border hover:border-lime/30 transition-colors duration-300 group"
-                  style={{ cursor: "none", textDecoration: "none" }}
-                >
-                  <div className="w-10 h-10 border border-border flex items-center justify-center flex-shrink-0 group-hover:border-lime/50 group-hover:text-lime transition-colors">
-                    <Icon size={18} className="text-muted group-hover:text-lime transition-colors" />
-                  </div>
-                  <div>
-                    <div className="font-mono text-xs text-muted tracking-wider uppercase mb-0.5">
-                      {label}
-                    </div>
-                    <div className="text-parchment group-hover:text-lime transition-colors font-medium">
-                      {value}
-                    </div>
-                  </div>
-                  <div className="ml-auto text-muted group-hover:text-lime transition-colors">
-                    →
-                  </div>
-                </motion.a>
+                />
               ))}
             </div>
 
-            {/* Availability */}
             <div className="mt-10 p-5 border border-lime/20 bg-lime/5">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-2 h-2 rounded-full bg-lime animate-pulse" />
                 <span className="font-mono text-xs text-lime tracking-wider uppercase">
-                  Доступний для нових ідей
+                  {contact.avail}
                 </span>
               </div>
-              <span className="text-parchment-dim text-sm">
-                Приймаю замовлення на березень — квітень 2026 р.
-              </span>
+              <span className="text-parchment-dim text-sm">{contact.availSub}</span>
             </div>
           </div>
 
-          {/* Right — Contact Form */}
+          {/* Form */}
           <div ref={formRef} className="reveal reveal-delay-2">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="font-mono text-xs text-muted tracking-widest uppercase block mb-2">
-                  Як вас звати *
+                  {form.name}
                 </label>
                 <input
                   type="text"
@@ -148,14 +207,14 @@ const ContactSection = memo(() => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full bg-ink-2 border border-border text-parchment px-4 py-3 font-body text-base focus:outline-none focus:border-lime/50 transition-colors placeholder:text-muted"
-                  placeholder="Колега Браткович"
+                  placeholder={form.namePlaceholder}
                   style={{ cursor: "none" }}
                 />
               </div>
 
               <div>
                 <label className="font-mono text-xs text-muted tracking-widest uppercase block mb-2">
-                  Email або Telegram *
+                  {form.contact}
                 </label>
                 <input
                   type="text"
@@ -163,26 +222,22 @@ const ContactSection = memo(() => {
                   value={formData.contact}
                   onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                   className="w-full bg-ink-2 border border-border text-parchment px-4 py-3 font-body text-base focus:outline-none focus:border-lime/50 transition-colors placeholder:text-muted"
-                  placeholder="hello@company.com або @telegram"
+                  placeholder={form.contactPlaceholder}
                   style={{ cursor: "none" }}
                 />
               </div>
 
               <div>
                 <label className="font-mono text-xs text-muted tracking-widest uppercase block mb-4 space-y-1">
-                  <span>Розкажіть про проєкт *</span>
-                  <span>Чи опишіть свою ідею *</span>
-                  <span>Або просто щось, що подумали *</span>
-                  <span>Чи знаєте конкретно, що потрібно ? *</span>
-                  <span>Напишіть хоч щось, мені буде приємно *</span>
+                  {form.messageLabels.map((l, i) => <span key={i} className="block">{l}</span>)}
                 </label>
                 <textarea
                   required
                   rows={5}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className=" w-full bg-ink-2 border border-border text-parchment px-4 py-3 font-body text-base focus:outline-none focus:border-lime/50 transition-colors resize-none placeholder:text-muted"
-                  placeholder="Опишіть що потрібно, строки, бюджет..."
+                  className="w-full bg-ink-2 border border-border text-parchment px-4 py-3 font-body text-base focus:outline-none focus:border-lime/50 transition-colors resize-none placeholder:text-muted"
+                  placeholder={form.messagePlaceholder}
                   style={{ cursor: "none" }}
                 />
               </div>
@@ -194,24 +249,17 @@ const ContactSection = memo(() => {
                 style={{ cursor: "none" }}
               >
                 {status === "sending" ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />
-                    Відправка...
-                  </>
+                  <><div className="w-4 h-4 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />{form.sending}</>
                 ) : status === "success" ? (
-                  <>
-                    <Check size={16} /> Відправлено!
-                  </>
+                  <><Check size={16} /> {form.success}</>
                 ) : (
-                  <>
-                    <Send size={16} /> Надіслати
-                  </>
+                  <><Send size={16} /> {form.send}</>
                 )}
               </button>
 
               {status === "error" && (
-                <span className="font-mono text-xs text-red-400 text-center">
-                  Помилка відправки. Напишіть напряму на email.
+                <span className="font-mono text-xs text-red-400 text-center block">
+                  {form.error}
                 </span>
               )}
             </form>

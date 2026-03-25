@@ -30,14 +30,14 @@ export const projects: Project[] = [
   {
     id: 3,
     slug: "BonnieBeadShop",
-    title: "Seller Shop",
+    title: "BONNIEBEAD",
     category: "Seller website",
     description:
       "Хендмейд магазин з каталогами, адмінкою та локальною реєстрацією юзера",
     tech: ["React", "TypeScript", "Vite"],
     url: "https://bonniebead.pages.dev",
     year: "2026",
-    screenshot: "/screenshoots/proj3.webp",
+    screenshot: "/screenshoots/bbstore.gif",
     featured: true,
   },
     {

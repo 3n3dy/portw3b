@@ -1,13 +1,10 @@
 import { memo } from "react";
-import { motion } from "framer-motion";
-
-const MARQUEE_ITEMS = [
-  "React", "·", "TypeScript", "·", "Vite", "·",
-  "Tailwind CSS", "·", "Framer Motion", "·", "Cloudflare", "·",
-  "Node.js", "·", "UI/UX", "·", "Лендінги", "·", "Портфоліо", "·",
-];
+import { useLang } from "@/context/LangContext";
 
 const HeroSection = memo(() => {
+  const { t } = useLang();
+  const { hero } = t;
+
   const scrollToProjects = () => {
     document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -35,33 +32,34 @@ const HeroSection = memo(() => {
       <div className="flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full px-6 pt-24 pb-16">
         {/* Eyebrow */}
         <div className="section-label mb-10 hero-fade hero-fade-1 opacity-0">
-          Веб-розробник · Інженер · Medical Staff
+          {hero.eyebrow}
         </div>
 
         {/* Headline */}
-        <h1 className="font-display font-black leading-none tracking-tight mb-10"
+        <h1
+          className="font-display font-black leading-none tracking-tight mb-10"
           style={{ fontSize: "clamp(3.5rem, 10vw, 9rem)" }}
         >
           <span className="hero-line">
-            <span className="hero-line-inner text-parchment">Будую</span>
+            <span className="hero-line-inner text-parchment">{hero.line1}</span>
           </span>
           <span className="hero-line">
-            <span className="hero-line-inner italic text-parchment">сайти,</span>
+            <span className="hero-line-inner italic text-parchment">{hero.line2}</span>
           </span>
           <span className="hero-line">
-            <span className="hero-line-inner text-lime">що продають.</span>
+            <span className="hero-line-inner text-lime">{hero.line3}</span>
           </span>
         </h1>
+
         <span
           className="font-display font-black italic shimmer-text block -mt-6 mb-10"
           style={{ fontSize: "clamp(0.875rem, 2.25vw, 2.25rem)" }}
         >
-          (ідеї його — код наш{" "}
+          {hero.shimmer}{" "}
           <span className="not-italic font-sans font-normal">©</span>
           <span className="not-italic"> AI</span>
           )
         </span>
-
 
         {/* Sub */}
         <div className="flex flex-col md:flex-row gap-8 md:items-end justify-between">
@@ -69,36 +67,31 @@ const HeroSection = memo(() => {
             className="text-parchment-dim font-body font-light max-w-md leading-relaxed hero-fade hero-fade-2 opacity-0"
             style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
           >
-            Лендінги, корпоративні сайти та веб-додатки на React + TypeScript + Vite.
-            <span>Від дизайну до деплою на Cloudflare.</span>
+            {hero.sub}
+            <span> {hero.sub2}</span>
           </span>
 
           <div className="flex gap-4 hero-fade hero-fade-3 opacity-0 flex-wrap">
             <button className="btn-lime" onClick={scrollToProjects} style={{ cursor: "none" }}>
-              Дивитись проекти ↓
+              {hero.cta}
             </button>
-            <a href="#contact" className="btn-outline" style={{ cursor: "none" }}
-              onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}>
-              Контакт
+            <a
+              href="#contact"
+              className="btn-outline"
+              style={{ cursor: "none" }}
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              {hero.ctaContact}
             </a>
           </div>
         </div>
 
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 0.6 }}
-          className="mt-16 pt-8 border-t border-border grid grid-cols-3 md:grid-cols-3 gap-6 max-w-2xl"
-        >
-          {[
-            { n: "10%", label: "Luck" },
-            { n: "20%", label: "Skill" },
-            { n: "15%", label: "Power of will" },
-            { n: "5%", label: "Pleasure" },
-            { n: "50%", label: "Pain" },
-            { n: "100%", label: "TypeScript for everyday" },
-          ].map(({ n, label }) => (
+        {/* Stats — CSS animation замість motion.div */}
+        <div className="mt-16 pt-8 border-t border-border grid grid-cols-3 gap-6 max-w-2xl hero-fade hero-fade-4 opacity-0">
+          {hero.stats.map(({ n, label }) => (
             <div key={label}>
               <div className="font-display font-black text-lime text-3xl md:text-4xl leading-none mb-1">
                 {n}
@@ -108,17 +101,18 @@ const HeroSection = memo(() => {
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Marquee */}
       <div className="border-t border-border py-4 overflow-hidden">
         <div className="marquee-track">
-          {Array(4).fill(0).flatMap(() => MARQUEE_ITEMS).map((item, i) => (
+          {Array(4).fill(0).flatMap(() => hero.marquee).map((item, i) => (
             <span
               key={i}
-              className={`font-mono text-xs tracking-widest uppercase px-4 whitespace-nowrap ${item === "·" ? "text-lime" : "text-muted"
-                }`}
+              className={`font-mono text-xs tracking-widest uppercase px-4 whitespace-nowrap ${
+                item === "·" ? "text-lime" : "text-muted"
+              }`}
             >
               {item}
             </span>
