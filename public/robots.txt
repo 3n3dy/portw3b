@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://w3bedy.com/sitemap.xml
