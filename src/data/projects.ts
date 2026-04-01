@@ -37,7 +37,7 @@ export const projects: Project[] = [
     tech: ["React", "TypeScript", "Vite"],
     url: "https://bonniebead.pages.dev",
     year: "2026",
-    screenshot: "/screenshoots/bbstore1.gif",
+    screenshot: "/screenshoots/bbstore.gif",
     featured: true,
   },
     {
