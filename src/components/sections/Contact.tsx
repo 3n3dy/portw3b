@@ -23,13 +23,19 @@ const cardHoverStyle: React.CSSProperties = {
 };
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLang } from "@/context/LangContext";
+import type { Lang } from "@/context/LangContext";
 
-const CONTACTS = [
+const MAILTO: Record<Lang, string> = {
+  uk: "mailto:w3bedy@proton.me?subject=Щодо%20створення%20сайту&body=Привіт,%20Андрій,%0A%0A",
+  en: "mailto:w3bedy@proton.me?subject=Regarding%20a%20website&body=Hi%20Andrii,%0A%0A",
+};
+
+const buildContacts = (lang: Lang) => [
   {
     icon: Mail,
     label: "Email",
     value: "w3bedy@proton.me",
-    href: "mailto:w3bedy@proton.me?subject=Щодо%20створення%20сайту&body=Привіт,%20Андрій,%0A%0A",
+    href: MAILTO[lang],
   },
   {
     icon: MessageCircle,
@@ -102,8 +108,9 @@ const ContactCard = memo(({
 ContactCard.displayName = "ContactCard";
 
 const ContactSection = memo(() => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { contact } = t;
+  const contacts = buildContacts(lang);
 
   const headRef = useScrollReveal<HTMLDivElement>();
   const formRef = useScrollReveal<HTMLDivElement>();
@@ -172,7 +179,7 @@ const ContactSection = memo(() => {
             </span>
 
             <div className="space-y-4 mt-8">
-              {CONTACTS.map(({ icon: Icon, label, value, href }) => (
+              {contacts.map(({ icon: Icon, label, value, href }) => (
                 <ContactCard
                   key={label}
                   icon={Icon}
