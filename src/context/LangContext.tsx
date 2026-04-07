@@ -19,14 +19,25 @@ interface LangContextType {
 
 const LangContext = createContext<LangContextType | null>(null);
 
+const getLangFromPath = (): Lang => {
+  const path = window.location.pathname;
+  if (path.startsWith("/uk")) return "uk";
+  if (path.startsWith("/en")) return "en";
+  return (localStorage.getItem("lang") as Lang) ?? "en";
+};
+
 export const LangProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLangState] = useState<Lang>(() => {
-    return (localStorage.getItem("lang") as Lang) ?? "uk";
-  });
+  const [lang, setLangState] = useState<Lang>(getLangFromPath);
 
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     localStorage.setItem("lang", l);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => setLangState(getLangFromPath());
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
   }, []);
 
   useEffect(() => {
