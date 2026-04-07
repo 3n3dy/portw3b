@@ -8,8 +8,14 @@ interface LangSwitcherProps {
   variant?: "header" | "mobile";
 }
 
+const switchLang = (code: Lang) => {
+  const hash = window.location.hash;
+  localStorage.setItem("lang", code);
+  window.location.assign(`/${code}/${hash}`);
+};
+
 const LangSwitcher = memo(({ variant = "header" }: LangSwitcherProps) => {
-  const { lang, setLang } = useLang();
+  const { lang } = useLang();
 
   const langs: { code: Lang; label: string }[] = [
     { code: "uk", label: "UA" },
@@ -22,7 +28,7 @@ const LangSwitcher = memo(({ variant = "header" }: LangSwitcherProps) => {
         {langs.map(({ code, label }) => (
           <button
             key={code}
-            onClick={() => setLang(code)}
+            onClick={() => switchLang(code)}
             style={{ cursor: "pointer" }}
             className={`
               relative font-mono text-xs tracking-widest2 uppercase px-4 py-2
@@ -52,7 +58,7 @@ const LangSwitcher = memo(({ variant = "header" }: LangSwitcherProps) => {
       {langs.map(({ code, label }) => (
         <button
           key={code}
-          onClick={() => setLang(code)}
+          onClick={() => switchLang(code)}
           style={{ cursor: "pointer" }}
           className={`
             relative font-mono text-xs tracking-widest uppercase px-3 py-1.5
