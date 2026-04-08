@@ -67,7 +67,7 @@ export const en = {
     title2: "project?",
     sub: "Write to me — we'll discuss the task, timeline and budget. I respond quickly (within a day).",
     avail: "Available for new ideas",
-    availSub: "Taking orders for March — April 2026.",
+    availSub: "Taking orders for April — May 2026.",
     form: {
       name: "Your name *",
       namePlaceholder: "Colleague Brandsworth",
@@ -122,7 +122,7 @@ export const en = {
       "╔══════════════════════════════════════╗",
       "║  HOURLY RATE: $20-80 USD/hour      ║",
       "║  PROJECT BUDGET: $200-8000+ USD   ║",
-      "║  AVAILABILITY: March-April 2026    ║",
+      "║  AVAILABILITY: April-May 2026    ║",
       "╚══════════════════════════════════════╝",
       "",
       "STATUS: UNLOCKED ✓",

@@ -35,9 +35,9 @@ export const projects: Project[] = [
     description:
       "Хендмейд магазин з каталогами, адмінкою та локальною реєстрацією юзера",
     tech: ["React", "TypeScript", "Vite"],
-    url: "https://bonniebead.pages.dev",
+    url: "https://bonniebead.store",
     year: "2026",
-    screenshot: "/screenshoots/bbstore.gif",
+    screenshot: "/screenshoots/bbstore1.mp4",
     featured: true,
   },
     {
